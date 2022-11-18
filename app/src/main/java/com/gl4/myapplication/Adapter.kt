@@ -5,10 +5,7 @@ import android.util.LogPrinter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.gl4.myapplication.Etudiant
 import com.gl4.myapplication.R
@@ -16,7 +13,7 @@ import com.gl4.myapplication.R.mipmap
 import java.util.*
 import kotlin.collections.ArrayList
 
-class WordListAdapter(private val dataSet: ArrayList<Etudiant>) :
+class WordListAdapter( var dataSet: ArrayList<Etudiant>) :
     RecyclerView.Adapter<WordListAdapter.ViewHolder>(), Filterable {
 
     var dataFilterList = ArrayList<Etudiant>()
@@ -59,12 +56,15 @@ class WordListAdapter(private val dataSet: ArrayList<Etudiant>) :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView
         val image: ImageView
+        val checkbox: CheckBox
 
 
         init {
             // Define click listener for the ViewHolder's View.
             textView = view.findViewById(R.id.textView)
             image = view.findViewById(R.id.imageView)
+            checkbox = view.findViewById(R.id.checkBox3)
+
         }
     }
 
@@ -79,6 +79,13 @@ class WordListAdapter(private val dataSet: ArrayList<Etudiant>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.image.setImageResource(mipmap.img);
         viewHolder.textView.text = dataFilterList[position].getPrenom() + " " + dataFilterList[position].getNom();
+        viewHolder.checkbox.setChecked( dataFilterList[position].presences );
+        viewHolder.checkbox.setOnCheckedChangeListener{buttonView, isChecked ->
+            dataSet[position].presences = !isChecked
+
+            Log.d("clicked : ",viewHolder.textView.text.toString())
+        }
+
     }
 
     override fun getItemCount() = dataFilterList.size
